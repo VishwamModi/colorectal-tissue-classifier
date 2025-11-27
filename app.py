@@ -215,7 +215,7 @@ def main():
         st.error("Failed to load model. Please check the model file path.")
         return
     
-    st.sidebar.success(f"✅ {selected_model} model loaded successfully!")
+    st.sidebar.success(f" {selected_model} model loaded successfully!")
     
     # App mode selection
     app_mode = st.sidebar.radio(
@@ -225,7 +225,7 @@ def main():
     )
     
     st.sidebar.markdown("---")
-    st.sidebar.markdown("### 📊 Model Information")
+    st.sidebar.markdown("###  Model Information")
     st.sidebar.info(f"**Model:** {selected_model}\n\n**Classes:** {len(CLASS_LABELS)}\n\n**Input Size:** {IMG_SIZE[0]}x{IMG_SIZE[1]}")
     
     # Single Image Prediction Mode
@@ -261,12 +261,12 @@ def main():
             with col3:
                 # Color code based on class
                 if pred_label == "Normal":
-                    st.success("✅ Normal Tissue")
+                    st.success(" Normal Tissue")
                 else:
-                    st.warning("⚠️ Abnormal Tissue Detected")
+                    st.warning(" Abnormal Tissue Detected")
             
             # Probability distribution
-            st.subheader("📊 Probability Distribution")
+            st.subheader(" Probability Distribution")
             prob_df = pd.DataFrame(list(class_probs.items()), columns=['Class', 'Probability'])
             prob_df = prob_df.sort_values('Probability', ascending=False)
             
@@ -302,7 +302,7 @@ def main():
                 st.info(f"Matplotlib visualization unavailable. Using native chart above.")
             
             # Grad-CAM visualization
-            st.subheader("🔍 Grad-CAM Visualization")
+            st.subheader(" Grad-CAM Visualization")
             show_gradcam = st.checkbox("Show Grad-CAM Heatmap", value=True)
             
             if show_gradcam:
@@ -321,11 +321,11 @@ def main():
                             st.image(cv2.cvtColor(gradcam_img, cv2.COLOR_BGR2RGB), 
                                    caption="Grad-CAM Overlay", use_container_width=True)
                         
-                        st.caption("💡 The colored regions show where the model focuses when making its prediction.")
+                        st.caption(" The colored regions show where the model focuses when making its prediction.")
     
     # Batch Prediction Mode
     elif app_mode == "Batch Prediction":
-        st.header("📦 Batch Prediction")
+        st.header(" Batch Prediction")
         
         uploaded_files = st.file_uploader(
             "Upload multiple images",
@@ -335,9 +335,9 @@ def main():
         )
         
         if uploaded_files:
-            st.info(f"📁 {len(uploaded_files)} image(s) uploaded")
+            st.info(f" {len(uploaded_files)} image(s) uploaded")
             
-            if st.button("🚀 Process All Images", type="primary"):
+            if st.button(" Process All Images", type="primary"):
                 results = []
                 progress_bar = st.progress(0)
                 
@@ -368,20 +368,20 @@ def main():
                 results_df = results_df.sort_values('Confidence_Value', ascending=False)
                 results_df = results_df.drop('Confidence_Value', axis=1)
                 
-                st.subheader("📊 Batch Prediction Results")
+                st.subheader(" Batch Prediction Results")
                 st.dataframe(results_df, use_container_width=True)
                 
                 # Download results
                 csv = results_df.to_csv(index=False)
                 st.download_button(
-                    label="📥 Download Results as CSV",
+                    label=" Download Results as CSV",
                     data=csv,
                     file_name=f"batch_predictions_{selected_model}.csv",
                     mime="text/csv"
                 )
                 
                 # Summary statistics
-                st.subheader("📈 Summary Statistics")
+                st.subheader(" Summary Statistics")
                 col1, col2, col3 = st.columns(3)
                 with col1:
                     st.metric("Total Images", len(results))
@@ -418,7 +418,7 @@ def main():
             need_reprocess = (st.session_state.comparison_image_id != current_image_id or 
                             st.session_state.comparison_results is None)
             
-            compare_button = st.button("🔄 Compare Models", type="primary")
+            compare_button = st.button(" Compare Models", type="primary")
             
             if compare_button or need_reprocess:
                 col1, col2 = st.columns(2)
@@ -533,9 +533,9 @@ def main():
                     # Agreement check
                     st.markdown("---")
                     if results['MobileNetV2']['pred_label'] == results['ResNet50']['pred_label']:
-                        st.success(f"✅ Both models agree: **{results['MobileNetV2']['pred_label']}**")
+                        st.success(f" Both models agree: **{results['MobileNetV2']['pred_label']}**")
                     else:
-                        st.warning(f"⚠️ Models disagree:\n- MobileNetV2: **{results['MobileNetV2']['pred_label']}** ({results['MobileNetV2']['confidence']:.2%})\n- ResNet50: **{results['ResNet50']['pred_label']}** ({results['ResNet50']['confidence']:.2%})")
+                        st.warning(f" Models disagree:\n- MobileNetV2: **{results['MobileNetV2']['pred_label']}** ({results['MobileNetV2']['confidence']:.2%})\n- ResNet50: **{results['ResNet50']['pred_label']}** ({results['ResNet50']['confidence']:.2%})")
 
 if __name__ == "__main__":
     main()
